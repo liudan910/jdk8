@@ -35,6 +35,9 @@ import java.util.function.Supplier;
  *
  * @since 1.7
  */
+/*
+新增对象
+ */
 public final class Objects {
     private Objects() {
         throw new AssertionError("No java.util.Objects instances for you!");
@@ -76,7 +79,7 @@ public final class Objects {
     * @see Arrays#deepEquals(Object[], Object[])
     * @see Objects#equals(Object, Object)
     */
-    public static boolean deepEquals(Object a, Object b) {
+    public static boolean deepEquals(Object a, Object b) {    //深度比较： 递归式比较
         if (a == b)
             return true;
         else if (a == null || b == null)

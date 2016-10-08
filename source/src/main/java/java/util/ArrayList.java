@@ -110,8 +110,9 @@ public class ArrayList<E> extends AbstractList<E>
 
     /**
      * Default initial capacity.
+     * 默认 容量 = 10
      */
-    private static final int DEFAULT_CAPACITY = 10;
+    private static final int DEFAULT_CAPACITY = 10;     //
 
     /**
      * Shared empty array instance used for empty instances.
@@ -189,6 +190,7 @@ public class ArrayList<E> extends AbstractList<E>
      * Trims the capacity of this <tt>ArrayList</tt> instance to be the
      * list's current size.  An application can use this operation to minimize
      * the storage of an <tt>ArrayList</tt> instance.
+     *
      */
     public void trimToSize() {
         modCount++;
@@ -252,7 +254,7 @@ public class ArrayList<E> extends AbstractList<E>
     private void grow(int minCapacity) {
         // overflow-conscious code
         int oldCapacity = elementData.length;
-        int newCapacity = oldCapacity + (oldCapacity >> 1);
+        int newCapacity = oldCapacity + (oldCapacity >> 1); // 新容量等于原来的 1.5倍
         if (newCapacity - minCapacity < 0)
             newCapacity = minCapacity;
         if (newCapacity - MAX_ARRAY_SIZE > 0)
@@ -261,7 +263,7 @@ public class ArrayList<E> extends AbstractList<E>
         elementData = Arrays.copyOf(elementData, newCapacity);
     }
 
-    private static int hugeCapacity(int minCapacity) {
+    private static int hugeCapacity(int minCapacity) { //容量大小 不能超过 2^31 -1 -8
         if (minCapacity < 0) // overflow
             throw new OutOfMemoryError();
         return (minCapacity > MAX_ARRAY_SIZE) ?
@@ -426,7 +428,7 @@ public class ArrayList<E> extends AbstractList<E>
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
     public E get(int index) {
-        rangeCheck(index);
+        rangeCheck(index); //检查范围
 
         return elementData(index);
     }
@@ -549,6 +551,7 @@ public class ArrayList<E> extends AbstractList<E>
     /**
      * Removes all of the elements from this list.  The list will
      * be empty after this call returns.
+     * 清空列表方式：  指针悬空
      */
     public void clear() {
         modCount++;
@@ -572,6 +575,7 @@ public class ArrayList<E> extends AbstractList<E>
      * @param c collection containing elements to be added to this list
      * @return <tt>true</tt> if this list changed as a result of the call
      * @throws NullPointerException if the specified collection is null
+     *
      */
     public boolean addAll(Collection<? extends E> c) {
         Object[] a = c.toArray();
@@ -627,6 +631,7 @@ public class ArrayList<E> extends AbstractList<E>
      *          fromIndex >= size() ||
      *          toIndex > size() ||
      *          toIndex < fromIndex})
+     *
      */
     protected void removeRange(int fromIndex, int toIndex) {
         modCount++;
@@ -637,7 +642,7 @@ public class ArrayList<E> extends AbstractList<E>
         // clear to let GC do its work
         int newSize = size - (toIndex-fromIndex);
         for (int i = newSize; i < size; i++) {
-            elementData[i] = null;
+            elementData[i] = null; //   移除元素的方式： 指针悬空
         }
         size = newSize;
     }
@@ -748,6 +753,9 @@ public class ArrayList<E> extends AbstractList<E>
      *             instance is emitted (int), followed by all of its elements
      *             (each an <tt>Object</tt>) in the proper order.
      */
+    /**
+    支持序列化： 将列表中元素逐个序列化
+     */
     private void writeObject(java.io.ObjectOutputStream s)
         throws java.io.IOException{
         // Write out element count, and any hidden stuff
@@ -761,7 +769,7 @@ public class ArrayList<E> extends AbstractList<E>
         for (int i=0; i<size; i++) {
             s.writeObject(elementData[i]);
         }
-
+        //比较 在 序列化过程中， 列表是否发生了修改
         if (modCount != expectedModCount) {
             throw new ConcurrentModificationException();
         }
@@ -836,6 +844,7 @@ public class ArrayList<E> extends AbstractList<E>
 
     /**
      * An optimized version of AbstractList.Itr
+     * 优化版 迭代器实现
      */
     private class Itr implements Iterator<E> {
         int cursor;       // index of next element to return
