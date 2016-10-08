@@ -1,0 +1,29 @@
+*.iml
+.idea/
+target
+.classpath
+.settings
+.project
+
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+out/
+
+src/demo/demo/db/programs/vtis/org/
+src/demo/demo/javafx_samples/3DViewer/
+src/demo/demo/javafx_samples/src/Ensemble8/lib/
+src/demo/sample/jnlp/servlet/apps/app1/dist/
+src/demo/sample/jnlp/servlet/apps/app2/dist/
+src/demo/sample/jnlp/servlet/apps/app3/dist/
+
+\audio

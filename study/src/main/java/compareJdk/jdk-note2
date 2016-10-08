@@ -1,0 +1,120 @@
+
+java8
+* lambda表达式
+1. lambda表达式
+   内容：将单一行为包装传递给其他代码。
+   应用：将行为作用于集合中的每一个元素；
+   实现所得：
+   1.如何使用Lambda表达 作为参数
+   目标类型Lambda必须是一个函数接口即参数传入Lambda表达式的条件是：参数类型是一个函数接口
+   使用注解@FunctionalInterface，可将接口置为函数接口，从而可使用Lamdate表达式或方法引用。
+   例：
+   @FunctionalInterface
+   public interface Callable<V> {
+       /**
+        * Computes a result, or throws an exception if unable to do so.
+        *
+        * @return computed result
+        * @throws Exception if unable to compute a result
+        */
+       V call() throws Exception;
+   }
+    某方法：
+   <T> T invoke(Callable<T> c) {
+       return c.call();
+   }
+   应用：
+   String s = invoke(()->"done"); lambda表达式： 函数无参数，无方法体，直接返回目标。
+2，方法引用
+ 由于lambda表达式调用了一个方法，故也可使用方法引用代替lambda表达式
+Arrays.sort(stringArray, String::compareToIgnoreCase);
+4种：
+    静态方法引用，
+    实例方法引用，
+    构造方法引用 String::new
+    特定类型的任意对象实例方法引用
+3，默认方法
+   在接口中定义默认方法以添加新功能，并兼容老版本接口。
+   3.1 使用default- 默认方法
+   interface Car{
+      default String getCompanyName(){
+           return "Foter";
+       }
+    }
+    当一个类 实现 一个接口后， 若该接口添加方法，该方法作为一个抽象方法，实现类必须实现新方法。
+    一种可代替方法是： 在接口写默认方法。
+    3.2 使用static -静态方法
+      interface Car{
+          static public String getCompany() {
+            return "Foster";
+         }
+           default String getCompanyName(){
+                   getCompany()";
+            }
+    }
+
+    场景： 默认方法：增加新功能到现有接口中，并保证原有接口的兼容性。  //对比： 以前增加新功能 是采用 增加新接口，继承原有接口。
+                     且 默认方法可以增加接受lambda表达式作为参数。
+                        Exp： Comparator通过default和static方法增强。注：若接受lambda表达，参数类型须为函数接口。
+                        @FunctionalInterface
+                        public interface Comparator<T> {……}
+4，加强的新API： 利用lambda表达式和流
+     java.util.function
+     java.util.stream
+     ------------------
+     java.util.function包中含有函数接口中，例Suppelier: 仅包含一个get()方法，无参数，仅返回一个对象。
+     接口Stream功能： java8集合均实现Stream接口。----参考 Python中的numpArray
+      exp1:  rosterSet.stream().forEach(p->p.printPerson());
+      exp2: widgets为一个集合。
+      *     int sum = widgets.stream()
+      *                      .filter(w -> w.getColor() == RED)
+      *                      .mapToInt(w -> w.getWeight())
+      *                      .sum();
+      特性：
+
+    理解： 函数包 java.util.function, 包含一组函数接口
+    主要方法只有一个：实现一个功能；关键词：
+    Bi, Double,Int,Long,
+    ToDoubleBi,ToDouble
+    Operation, Function,Consumer,Predicate,Supplier
+    exp:
+    a. java8中接口Comparator被注明为函数接口
+    @FunctionalInterface
+    public interface Comparator<T> {
+    ……
+     default Comparator<T> thenComparing(Comparator<? super T> other) {……}
+    }
+    b.定义类： public interface Deck {
+      void sort(Comparator<Card> c);
+    }
+   c.Deck的对象，可使用：
+   myDeck.sort(
+        Comparator
+            .comparing(Card::getRank)        //comparing方法参数为函数接口，故可传入方法引用"::"
+            .thenComparing(Comparator.comparing(Card::getSuit)));
+     也可以传入Lambda表达式：
+     myDeck.sort(
+         (firstCard, secondCard) -> {
+             int compare =
+                 firstCard.getRank().value() - secondCard.getRank().value();
+             if (compare != 0)
+                 return compare;
+             else
+                 return firstCard.getSuit().value() - secondCard.getSuit().value();
+         }
+     );
+
+
+* 提高类型推断
+* 方法参数反射
+ 使用java.lang.reflect.Executable.gerParameters可获得方法或构造器的参数。
+
+----------------------------
+附： 对  public static <T extends Comparable<? super T>> void sort(List<T> list) 其返回类型的理解 。
+ step1:
+   <T extends Comparable< T>>
+    使用比较器被比较的类型：必须是同一类型
+    故，T继承Comparable接口，必须保证对方是能够与之比较的类型。
+  <T extends Comparable<? super T>>
+  使用比较器被比较的类型，均有同一基类。
+  循环泛型CRG本质： 基类用导出类替代其参数。
