@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2013, Oracle and/or its affiliates. All rights reserved.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  *
@@ -44,10 +44,6 @@ import sun.misc.JavaIOFileDescriptorAccess;
 class DualStackPlainDatagramSocketImpl extends AbstractPlainDatagramSocketImpl
 {
     static JavaIOFileDescriptorAccess fdAccess = SharedSecrets.getJavaIOFileDescriptorAccess();
-
-    static {
-        initIDs();
-    }
 
     // true if this socket is exclusively bound
     private final boolean exclusiveBind;
@@ -292,6 +288,4 @@ class DualStackPlainDatagramSocketImpl extends AbstractPlainDatagramSocketImpl
         int optionValue) throws SocketException;
 
     private static native int socketGetIntOption(int fd, int cmd) throws SocketException;
-
-    native int dataAvailable();
 }

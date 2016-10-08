@@ -545,8 +545,9 @@ public final class HijrahChronology extends AbstractChronology implements Serial
     @Override
     public boolean isLeapYear(long prolepticYear) {
         checkCalendarInit();
-        if (prolepticYear < getMinimumYear() || prolepticYear > getMaximumYear()) {
-            return false;
+        int epochMonth = yearToEpochMonth((int) prolepticYear);
+        if (epochMonth < 0 || epochMonth > maxEpochDay) {
+            throw new DateTimeException("Hijrah date out of range");
         }
         int len = getYearLength((int) prolepticYear);
         return (len > 354);
